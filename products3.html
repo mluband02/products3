@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+</head>
+<body>
+<script language = "javascript">
+
+
+$(document).ready(function()
+{
+    $("#result").css("font-size", "30px");
+    $("#button1").click(function()
+    {
+        $("#result").empty()
+        $.get("https://mluband02.github.io/productsJSON/products.json", 
+        function(data)
+        {
+            for (i = 0; i<data.products.length; i++)
+            {
+                if(Array.isArray(data.products[i].categories) == false)
+                {
+                    if(data.products[i].categories == $("#list").val())
+                    {
+                        $("#result").append(data.products[i].name + "<br>")
+                    }
+                }
+                else if (data.products[i].categories.includes($("#list").val()))
+                {
+                    $("#result").append(data.products[i].name + "<br>")
+                }
+            }
+        })
+    })
+})
+    
+    
+$.get("https://mluband02.github.io/productsJSON/products.json", 
+    function(data)
+    {
+        cats = new Set()
+        for (i = 0; i<data.products.length; i++)
+        {
+            if(Array.isArray(data.products[i].categories) == false)
+            {
+                cats.add(data.products[i].categories)
+            }
+            else
+            {
+                data.products[i].categories.forEach(element => 
+                {
+                    cats.add(element)
+                })
+            }
+        }
+
+        cats.forEach(element => 
+        {
+            $("#list").append("<option value = '"+ element + "'>"+ element + "</option>")
+        })
+    })
+
+</script>
+<select id = 'list'></select>
+<input type = 'button' name = 'btn1' id = 'button1' value = "Filter">
+<div id = result></div>
+</body>
+
+</html>
